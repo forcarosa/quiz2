@@ -87,17 +87,21 @@ function select(btn, correct){
 function finish(){
   optionsEl.innerHTML = '';
   questionEl.textContent = '';
-  numEl.textContent = total;
   statusEl.textContent = `Você acertou ${score} de ${total}.`;
+
+  // Remove o contador de perguntas ao finalizar
+  const progress = document.getElementById('progress');
+  if (progress) progress.style.display = 'none';
+
   if(score>=4){
     goalEl.style.display='block';
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Finalizar';
     btn.onclick = ()=> {
-    window.open('', '_self');
-    window.close();
-};
+      window.open('', '_self');
+      window.close();
+    };
     optionsEl.appendChild(btn);
   } else {
     const btn = document.createElement('button');
