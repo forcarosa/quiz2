@@ -1,0 +1,111 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz Força Rosa — PREVENÇÃO</title>
+<style>
+:root{--bg1:#ffe6f0;--bg2:#fff;--pink:#E91E63;--correct:#4CAF50;--wrong:#F44336;--card:#ffffff}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:linear-gradient(135deg,var(--bg1),var(--bg2));display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;color:#000}
+.card{width:100%;max-width:760px;background:var(--card);border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.08);text-align:center}
+.header{display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:8px}
+.logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#fff0f5,#ffe6f0);display:flex;align-items:center;justify-content:center;font-size:28px}
+h1{margin:0;color:var(--pink);font-size:1.4rem}
+#goal{display:none;background:#fff0f6;border:1px solid #ffd0e8;padding:12px;border-radius:10px;margin:10px 0;font-weight:700}
+#question{margin:18px 0;font-size:1.05rem}
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.btn{padding:12px 14px;border-radius:10px;border:0;font-size:16px;cursor:pointer;background:#fde4ee;transition:transform .12s,box-shadow .12s;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
+.btn:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,0.06)}
+.btn[disabled]{opacity:0.7;cursor:default;transform:none;box-shadow:none}
+.btn.correct{background:var(--correct);color:#fff}
+.btn.wrong{background:var(--wrong);color:#fff}
+#status{margin-top:10px;font-weight:700}
+.footer{margin-top:14px;color:#666;font-size:0.95rem}
+@media(max-width:480px){.card{padding:16px} .btn{font-size:15px;padding:12px} h1{font-size:1.1rem} #question{font-size:1rem}}
+</style>
+</head>
+<body>
+  <div class="card" role="main">
+    <div class="header"><div class="logo">🎀</div><h1>Quiz Força Rosa — PREVENÇÃO</h1></div>
+    <div id="goal" aria-live="polite">🎉 Você atingiu 4 acertos! Procure um membro da equipe Força Rosa para receber seu brinde 🎁</div>
+    <div id="questionArea">
+      <div id="progress">Pergunta <span id="num">1</span> / 10</div>
+      <div id="question"></div>
+      <div class="options" id="options"></div>
+      <div id="status" aria-live="polite"></div>
+    </div>
+    <div class="footer">Tema: PREVENÇÃO — Complete o desafio com 4 acertos para ganhar o brinde!</div>
+  </div>
+
+<script>
+const raw = [{"q": "Qual desses hábitos ajuda a reduzir o risco de câncer de mama?", "o": ["Alimentação rica em gorduras saturadas", "Vida sedentária", "Prática regular de atividade física", "Uso prolongado de hormônios sem acompanhamento"], "a": 2}, {"q": "Qual desses fatores aumenta o risco de desenvolver câncer de mama?", "o": ["Praticar esportes", "Dormir bem", "Não consumir álcool", "Fumar regularmente"], "a": 3}, {"q": "O que acontece quando a mulher amamenta exclusivamente até os 6 meses?", "o": ["Aumenta o risco de câncer", "Reduz o risco de câncer de mama", "Não tem relação com o câncer", "Aumenta o risco de infecção mamária"], "a": 1}, {"q": "O uso prolongado de hormônios deve ser feito com cuidado porque:", "o": ["Não tem qualquer efeito na mama", "Pode aumentar o risco de câncer de mama", "É recomendado para todas as mulheres", "Substitui a mamografia"], "a": 1}, {"q": "A maioria dos casos de câncer de mama está relacionada a:", "o": ["Fatores genéticos hereditários", "Estresse emocional", "Hábitos e estilo de vida", "Uso de cosméticos"], "a": 2}, {"q": "Manter o peso corporal adequado após a menopausa:", "o": ["Diminui o risco de câncer de mama", "Aumenta o risco de câncer de mama", "Não interfere no risco", "Só influencia em mulheres jovens"], "a": 0}, {"q": "A exposição solar moderada ajuda na prevenção porque:", "o": ["Produz vitamina D", "Diminui o colesterol", "Evita tumores de pele", "Substitui exercícios"], "a": 0}, {"q": "O consumo de álcool deve ser:", "o": ["Diário, em pequenas doses", "Livre, sem restrição", "Reduzido ou evitado", "Aumentado para relaxar"], "a": 2}, {"q": "O estresse crônico:", "o": ["Pode afetar o sistema imunológico", "Protege contra o câncer", "Não tem relação com a saúde", "É sempre positivo"], "a": 0}, {"q": "Dormir bem é importante porque:", "o": ["Reduz hormônios associados ao câncer", "Aumenta o estresse", "Interrompe o metabolismo", "Prejudica a imunidade"], "a": 0}];
+
+function shuffle(a){ const arr = a.slice(); for(let i=arr.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+
+let perguntas = shuffle(raw.map(q=>({q:q.q, o:q.o.slice(), a:q.a})));
+let idx = 0;
+let score = 0;
+const total = perguntas.length;
+const questionEl = document.getElementById('question');
+const optionsEl = document.getElementById('options');
+const numEl = document.getElementById('num');
+const statusEl = document.getElementById('status');
+const goalEl = document.getElementById('goal');
+
+function render(){
+  if(score>=4){ finish(); return; }
+  if(idx>=perguntas.length){ finish(); return; }
+  const item = perguntas[idx];
+  numEl.textContent = idx+1;
+  questionEl.textContent = item.q;
+  let opts = item.o.map((text,i)=>({text, correct: i===item.a}));
+  opts = shuffle(opts);
+  optionsEl.innerHTML = '';
+  opts.forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.textContent = opt.text;
+    btn.onclick = ()=> select(btn, opt.correct);
+    optionsEl.appendChild(btn);
+  });
+  statusEl.textContent = '';
+}
+
+function select(btn, correct){
+  const buttons = optionsEl.querySelectorAll('button');
+  buttons.forEach(b=>b.disabled=true);
+  if(correct){ btn.classList.add('correct'); score++; statusEl.textContent = `Acertos: ${score}`; }
+  else{ btn.classList.add('wrong'); statusEl.textContent = `Acertos: ${score}`; }
+  idx++;
+  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,800); return; }
+  if(idx>=perguntas.length){ setTimeout(finish,800); return; }
+  setTimeout(()=> render(), 700);
+}
+
+function finish(){
+  optionsEl.innerHTML = '';
+  questionEl.textContent = '';
+  numEl.textContent = total;
+  statusEl.textContent = `Você acertou ${score} de ${total}.`;
+  if(score>=4){
+    goalEl.style.display='block';
+    const btn = document.createElement('button');
+    btn.className='btn';
+    btn.textContent = 'Finalizar';
+    btn.onclick = ()=> { window.location.href = 'index.html'; };
+    optionsEl.appendChild(btn);
+  } else {
+    const btn = document.createElement('button');
+    btn.className='btn';
+    btn.textContent = 'Tentar novamente';
+    btn.onclick = ()=> { location.reload(); };
+    optionsEl.appendChild(btn);
+  }
+}
+
+render();
+</script>
+</body>
+</html>
