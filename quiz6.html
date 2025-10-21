@@ -1,69 +1,71 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Quiz Força Rosa — Direitos do Trabalhador</title>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Quiz Força Rosa — DIREITOS DO TRABALHADOR</title>
 <style>
-  body {font-family: 'Poppins', sans-serif; background-color: #ffe6f0; margin: 0; padding: 0; text-align: center; color: #333;}
-  .container {max-width: 600px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
-  h1 {color: #e91e63;}
-  button {background-color: #e91e63; color: white; border: none; border-radius: 10px; padding: 12px 20px; margin: 10px; font-size: 16px; cursor: pointer;}
-  button:hover {background-color: #d81b60;}
-  .hidden {display: none;}
-</style>
-</head>
-<body>
-<div class="container">
-  <h1>🎀 Quiz Força Rosa — Direitos do Trabalhador</h1>
-  <div id="quiz"></div>
-  <div id="result" class="hidden"></div>
-</div>
-
+:root{--bg:#ffe6f0;--pink:#ff4da6;--soft:#fde9f3;--goal:#ffd0e8}
+body{font-family:system-ui,Arial;margin:0;background:var(--bg);color:#222;display:flex;justify-content:center;padding:20px;}
+.container{max-width:900px;width:100%}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.logo{width:54px;height:54px;border-radius:8px;background:linear-gradient(135deg,#ffe6f0,#ffdff0);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--pink)}
+h1{margin:0;color:var(--pink);font-size:1.4rem}
+.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,0.08)}
+#goal{display:none;background:var(--goal);padding:10px;border-radius:8px;font-weight:700;margin-bottom:12px;text-align:center}
+#progress{color:#555;margin-bottom:8px}
+h2.question{font-size:1.05rem;margin:10px 0 12px 0;color:#333}
+.options{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.option{background:var(--soft);padding:10px 12px;border-radius:8px;cursor:pointer;user-select:none;transition:transform .08s ease}
+.option:hover{transform:translateY(-2px)}
+.correct{background:#c8e6c9!important}
+.wrong{background:#ffcdd2!important}
+.controls{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px}
+button{background:var(--pink);color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-weight:700}
+button.secondary{background:#6a1b4d}
+.hidden{display:none}
+#score{display:none;text-align:center;margin-top:14px;font-weight:700}
+.confetti{position:fixed;width:10px;height:10px;pointer-events:none;z-index:9999;animation:fall 3s linear forwards;border-radius:2px}
+@keyframes fall{0%{transform:translateY(-10vh) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}
+.footer{text-align:center;margin-top:12px;color:#666;font-size:0.9rem}
+</style></head><body>
+<div class="container"><div class="header"><div class="logo">🎀</div><div><h1>Quiz Força Rosa — DIREITOS DO TRABALHADOR</h1><div style="font-size:0.95rem;color:#666">Categoria: DIREITOS DO TRABALHADOR — Responda e avance no desafio</div></div></div>
+<div class="card"><div id="goal">🎉 Parabéns! Você cumpriu 4 acertos! 💕<br>Procure a equipe Força Rosa para receber seu brinde 🎁</div>
+<div id="progress">1 / 10</div>
+<div id="question-container"></div><div id="result" style="display:none;margin-top:12px;font-weight:700"></div></div><div style="text-align:center;margin-top:12px;color:#666">Parte do Desafio Força Rosa — Complete os 6 tópicos</div></div>
+<audio id="applause" src="https://actions.google.com/sounds/v1/cheering/crowd_cheer.ogg" preload="auto"></audio>
 <script>
-const perguntas = [{'pergunta': '💼 O trabalhador afastado por tratamento tem direito a:', 'opcoes': ['Férias vitalícias', 'Aumento salarial', 'Auxílio-doença do INSS', 'Encerramento do contrato'], 'correta': 'Auxílio-doença do INSS'}];
+const rawQuestions = [{"pergunta": "O trabalhador afastado por tratamento oncológico tem direito a:", "opcoes": ["Auxílio-doença do INSS (quando atendidos os requisitos)", "Férias vitalícias", "Aumento salarial automático", "Encerramento do contrato sem pagamento"], "correta": 0}, {"pergunta": "Se o tratamento deixar sequelas permanentes, o paciente pode ter direito a:", "opcoes": ["Aposentadoria por invalidez (se comprovada)", "Direito a duas licenças-maternidade adicionais", "Transferência imediata para qualquer cargo", "Suspensão de pagamento de contas sem análise"], "correta": 0}, {"pergunta": "Durante o tratamento, o trabalhador pode solicitar:", "opcoes": ["Auxílio financeiro sem avaliação", "Saque do FGTS e PIS/PASEP conforme regras aplicáveis", "Cancelamento automático de dívidas sem processo", "Pagamento de multa por parte do empregador"], "correta": 1}, {"pergunta": "Mulheres mastectomizadas têm direito a:", "opcoes": ["Reconstrução mamária gratuita pelo SUS, conforme a lei", "Apenas cirurgia estética particular", "Reconstrução apenas após 10 anos", "Alimentação gratuita vitalícia"], "correta": 0}, {"pergunta": "A Lei nº 12.732/2012 garante:", "opcoes": ["Acesso a próteses gratuitamente em qualquer país", "Início do tratamento oncológico pelo SUS em prazo máximo recomendado (com regras específicas)", "Isenção automática de IPTU", "Tratamento apenas em hospitais privados"], "correta": 1}, {"pergunta": "Planos de saúde podem negar cobertura do tratamento oncológico quando:", "opcoes": ["Nunca — o tratamento oncológico tem cobertura conforme legislação e regras do plano", "Sempre podem negar sem justificar", "Apenas quando o paciente não pagar a anuuidade", "Se a doença for genética"], "correta": 0}, {"pergunta": "Pacientes com câncer podem ter isenção de imposto de renda quando:", "opcoes": ["Há invalidez permanente e seguindo a legislação vigente", "Estão empregados", "Recebem alta hospitalar", "Têm qualquer despesa médica"], "correta": 0}, {"pergunta": "Pacientes em tratamento pelo SUS têm direito a:", "opcoes": ["Transporte gratuito em todos os deslocamentos sem regras", "Possibilidade de transporte ou auxílio para tratamento em algumas cidades/condições, conforme programas locais", "Transporte apenas para viagens internacionais", "Nenhum tipo de auxílio logístico"], "correta": 1}, {"pergunta": "Quem tem financiamento habitacional e fica inválido por câncer:", "opcoes": ["Pode ter quitação do contrato conforme cláusulas da seguradora e do contrato", "Perde automaticamente o imóvel", "Deve pagar multa por invalidez", "Tem aumento automático da parcela"], "correta": 0}, {"pergunta": "Após o tratamento, o retorno ao trabalho deve ser:", "opcoes": ["Imediato e sem qualquer avaliação", "Acompanhado por médico e, se necessário, feito de forma gradativa com adaptações", "Proibido para sempre", "Decidido exclusivamente pelo empregador"], "correta": 1}];
 
-let perguntaAtual = 0;
-let acertos = 0;
-const quizDiv = document.getElementById('quiz');
-const resultDiv = document.getElementById('result');
+function shuffle(a){ const arr=a.slice(); for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
 
-// Embaralhar perguntas
-function shuffle(array) {return array.sort(() => Math.random() - 0.5);}
-shuffle(perguntas);
+let questions = shuffle(rawQuestions.slice());
+let current = 0;
+let score = 0;
+const container = document.getElementById('question-container');
+const goal = document.getElementById('goal');
+const result = document.getElementById('result');
+const applause = document.getElementById('applause');
 
-function mostrarPergunta() {
-  if (acertos >= 4) return finalizarQuiz();
-  if (perguntaAtual >= perguntas.length) return finalizarQuiz();
-
-  const q = perguntas[perguntaAtual];
-  const alternativas = shuffle([...q.opcoes]);
-  quizDiv.innerHTML = `<h3>${q.pergunta}</h3>` + alternativas.map(a => 
-    `<button onclick='verificarResposta("${a}", "${q.correta}")'>${a}</button>`).join('');
+function render(){
+  if(score>=4){ finalize(); return; }
+  if(current>=questions.length){ finalize(); return; }
+  const q = questions[current];
+  const opts = shuffle(q.opcoes.map((t,i)=>({t, correct: i===q.correta})));
+  container.innerHTML = `<h2 class="question">${q.pergunta}</h2>` + opts.map((o,idx)=>`<button class="option" data-correct="${o.correct}" onclick="answer(this)">${String.fromCharCode(65+idx)}) ${o.t}</button>`).join('');
+  document.getElementById('progress').textContent = (current+1) + ' / ' + questions.length;
 }
 
-function verificarResposta(escolha, correta) {
-  if (escolha === correta) {
-    acertos++;
-  }
-  perguntaAtual++;
-  if (acertos >= 4 || perguntaAtual >= perguntas.length) {
-    finalizarQuiz();
-  } else {
-    mostrarPergunta();
-  }
+function answer(btn){ const correct = btn.dataset.correct === 'true'; // disable all
+  document.querySelectorAll('.option').forEach(b=>b.disabled=true);
+  if(correct){ score++; btn.classList.add('correct'); } else { btn.classList.add('wrong'); }
+  if(score>=4){ goal.style.display='block'; createConfetti(); try{ applause.currentTime=0; applause.play(); }catch(e){} finalize(); return; }
+  current++;
+  if(current>=questions.length){ finalize(); return; }
+  setTimeout(()=>render(), 400);
 }
 
-function finalizarQuiz() {
-  quizDiv.innerHTML = "";
-  resultDiv.classList.remove('hidden');
-  resultDiv.innerHTML = `
-    <h2>🎉 Parabéns! Você concluiu o Desafio Força Rosa! 💕</h2>
-    <p>Procure um membro da equipe Força Rosa para receber seu brinde! 🎁</p>
-  `;
-}
+function createConfetti(){ for(let i=0;i<60;i++){ const c=document.createElement('div'); c.className='confetti'; c.style.left=Math.random()*100+'vw'; c.style.backgroundColor=`hsl(${Math.random()*40+320},70%,60%)`; c.style.width=(6+Math.random()*8)+'px'; c.style.height=(6+Math.random()*8)+'px'; document.body.appendChild(c); setTimeout(()=>c.remove(),3200); } }
 
-mostrarPergunta();
-</script>
-</body>
-</html>
+function finalize(){ container.innerHTML=''; result.style.display='block'; result.innerHTML = `Você acertou ${score} de ${questions.length}.` + (score>=4? '<br><strong>Parabéns! Você venceu o desafio — procure a equipe Força Rosa para receber seu brinde.</strong>':'<br><strong>Você não atingiu 4 acertos. Tente novamente!</strong>'); window.scrollTo(0,0); }
+
+render();
+</script></body></html>
