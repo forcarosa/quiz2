@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Quiz Força Rosa — Diagnóstico</title>
+<style>
+  body {font-family: 'Poppins', sans-serif; background-color: #ffe6f0; margin: 0; padding: 0; text-align: center; color: #333;}
+  .container {max-width: 600px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
+  h1 {color: #e91e63;}
+  button {background-color: #e91e63; color: white; border: none; border-radius: 10px; padding: 12px 20px; margin: 10px; font-size: 16px; cursor: pointer;}
+  button:hover {background-color: #d81b60;}
+  .hidden {display: none;}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎀 Quiz Força Rosa — Diagnóstico</h1>
+  <div id="quiz"></div>
+  <div id="result" class="hidden"></div>
+</div>
+
+<script>
+const perguntas = [{'pergunta': '🩺 A partir de que idade é recomendada a mamografia anual?', 'opcoes': ['20 anos', '30 anos', '40 anos', '50 anos'], 'correta': '40 anos'}];
+
+let perguntaAtual = 0;
+let acertos = 0;
+const quizDiv = document.getElementById('quiz');
+const resultDiv = document.getElementById('result');
+
+// Embaralhar perguntas
+function shuffle(array) {return array.sort(() => Math.random() - 0.5);}
+shuffle(perguntas);
+
+function mostrarPergunta() {
+  if (acertos >= 4) return finalizarQuiz();
+  if (perguntaAtual >= perguntas.length) return finalizarQuiz();
+
+  const q = perguntas[perguntaAtual];
+  const alternativas = shuffle([...q.opcoes]);
+  quizDiv.innerHTML = `<h3>${q.pergunta}</h3>` + alternativas.map(a => 
+    `<button onclick='verificarResposta("${a}", "${q.correta}")'>${a}</button>`).join('');
+}
+
+function verificarResposta(escolha, correta) {
+  if (escolha === correta) {
+    acertos++;
+  }
+  perguntaAtual++;
+  if (acertos >= 4 || perguntaAtual >= perguntas.length) {
+    finalizarQuiz();
+  } else {
+    mostrarPergunta();
+  }
+}
+
+function finalizarQuiz() {
+  quizDiv.innerHTML = "";
+  resultDiv.classList.remove('hidden');
+  resultDiv.innerHTML = `
+    <h2>🎉 Parabéns! Você concluiu o Desafio Força Rosa! 💕</h2>
+    <p>Procure um membro da equipe Força Rosa para receber seu brinde! 🎁</p>
+  `;
+}
+
+mostrarPergunta();
+</script>
+</body>
+</html>
