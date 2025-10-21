@@ -79,9 +79,9 @@ function select(btn, correct){
   if(correct){ btn.classList.add('correct'); score++; statusEl.textContent = `Acertos: ${score}`; }
   else{ btn.classList.add('wrong'); statusEl.textContent = `Acertos: ${score}`; }
   idx++;
-  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,800); return; }
-  if(idx>=perguntas.length){ setTimeout(finish,800); return; }
-  setTimeout(()=> render(), 700);
+  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,1200); return; }
+  if(idx>=perguntas.length){ setTimeout(finish,1200); return; }
+  setTimeout(()=> render(), 1000);
 }
 
 function finish(){
