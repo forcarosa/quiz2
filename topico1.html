@@ -79,7 +79,12 @@ function select(btn, correct){
   if(correct){ btn.classList.add('correct'); score++; statusEl.textContent = `Acertos: ${score}`; }
   else{ btn.classList.add('wrong'); statusEl.textContent = `Acertos: ${score}`; }
   idx++;
-  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,800); return; }
+  if(score>=4){
+    document.getElementById('progress').style.display='none';
+    goalEl.style.display='block';
+    setTimeout(finish,800);
+    return;
+  }
   if(idx>=perguntas.length){ setTimeout(finish,800); return; }
   setTimeout(()=> render(), 700);
 }
@@ -89,12 +94,21 @@ function finish(){
   questionEl.textContent = '';
   numEl.textContent = score >= 4 ? '' : total;
   statusEl.textContent = `Você acertou ${score} de ${total}.`;
+
   if(score>=4){
     goalEl.style.display='block';
+    document.getElementById('progress').style.display='none';
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Finalizar';
-    btn.onclick = ()=> { window.close(); };
+    btn.onclick = ()=> {
+      try {
+        window.open('', '_self').close();
+        location.href = 'about:blank';
+      } catch(e){
+        location.href = 'about:blank';
+      }
+    };
     optionsEl.appendChild(btn);
   } else {
     const btn = document.createElement('button');
