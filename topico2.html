@@ -58,7 +58,7 @@ function render(){
   if(score>=4){ finish(); return; }
   if(idx>=perguntas.length){ finish(); return; }
   const item = perguntas[idx];
-  numEl.textContent = idx+1;
+  numEl.textContent = score >= 4 ? '' : idx + 1;
   questionEl.textContent = item.q;
   let opts = item.o.map((text,i)=>({text, correct: i===item.a}));
   opts = shuffle(opts);
