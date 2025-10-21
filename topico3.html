@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -39,7 +40,7 @@ h1{margin:0;color:var(--pink);font-size:1.4rem}
   </div>
 
 <script>
-const raw = [];
+const raw = [{"q": "O diagnóstico precoce aumenta as chances de cura para:", "o": ["20%", "50%", "70%", "Mais de 90%"], "a": 3}, {"q": "Exercício físico durante o tratamento:", "o": ["É proibido", "Prejudica a recuperação", "Reduz efeitos colaterais e melhora o bem-estar", "Substitui medicamentos"], "a": 2}, {"q": "O apoio psicológico durante o tratamento:", "o": ["É inútil", "Ajuda a lidar com o diagnóstico e os efeitos emocionais", "Deve ser evitado para não lembrar a doença", "Substitui o oncologista"], "a": 1}, {"q": "Cuidar da saúde mental no tratamento:", "o": ["É fundamental e faz parte do cuidado global", "É secundário e dispensável", "Atrapalha o tratamento físico", "Deve ser adiado até o fim do tratamento"], "a": 0}, {"q": "A perda de cabelo durante o tratamento:", "o": ["É inevitável e permanente", "Não pode ser amenizada", "É geralmente temporária e não elimina a vaidade", "Indica que o tratamento falhou"], "a": 2}, {"q": "Um dos efeitos colaterais mais comuns da quimioterapia é:", "o": ["Aumento de apetite extremo", "Queda de cabelo", "Crescimento de unhas instantâneo", "Ganho de visão noturna"], "a": 1}, {"q": "Durante o tratamento, o sistema imunológico pode:", "o": ["Ficar mais vulnerável", "Ficar imune a outras doenças", "Permanecer inalterado sempre", "Ser substituído por terapia física"], "a": 0}, {"q": "A hidratação durante o tratamento é importante porque:", "o": ["Reduz náuseas e ajuda o corpo a eliminar toxinas", "Substitui a necessidade de alimentação", "Aumenta os efeitos colaterais", "Não tem importância clínica"], "a": 0}, {"q": "O acompanhamento médico após o tratamento:", "o": ["Deve continuar regularmente conforme orientação clínica", "Pode ser encerrado assim que terminar a quimioterapia", "É opcional e depende do humor do paciente", "Deve ser feito somente se houver sintomas"], "a": 0}, {"q": "A equipe multidisciplinar no tratamento costuma incluir:", "o": ["Apenas o oncologista", "Médico, nutricionista, psicólogo e fisioterapeuta (entre outros)", "Somente enfermeiros", "Apenas cirurgião plástico"], "a": 1}];
 
 function shuffle(a){ const arr = a.slice(); for(let i=arr.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
 
@@ -78,26 +79,28 @@ function select(btn, correct){
   if(correct){ btn.classList.add('correct'); score++; statusEl.textContent = `Acertos: ${score}`; }
   else{ btn.classList.add('wrong'); statusEl.textContent = `Acertos: ${score}`; }
   idx++;
-  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,1200); return; }
-  if(idx>=perguntas.length){ setTimeout(finish,1200); return; }
-  setTimeout(()=> render(), 1000);
+  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,800); return; }
+  if(idx>=perguntas.length){ setTimeout(finish,800); return; }
+  setTimeout(()=> render(), 700);
 }
 
 function finish(){
   optionsEl.innerHTML = '';
   questionEl.textContent = '';
+  numEl.textContent = score >= 4 ? '' : total;
+  statusEl.textContent = `Você acertou ${score} de ${total}.`;
   if(score>=4){
     goalEl.style.display='block';
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Finalizar';
-    btn.onclick = ()=>{ window.close(); };
+    btn.onclick = ()=> { window.close(); };
     optionsEl.appendChild(btn);
   } else {
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Tentar novamente';
-    btn.onclick = ()=>{ location.reload(); };
+    btn.onclick = ()=> { location.reload(); };
     optionsEl.appendChild(btn);
   }
 }

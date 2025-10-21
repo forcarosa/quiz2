@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -39,7 +40,7 @@ h1{margin:0;color:var(--pink);font-size:1.4rem}
   </div>
 
 <script>
-const raw = [];
+const raw = [{"q": "Qual desses hábitos ajuda a reduzir o risco de câncer de mama?", "o": ["Alimentação rica em gorduras saturadas", "Vida sedentária", "Prática regular de atividade física", "Uso prolongado de hormônios sem acompanhamento"], "a": 2}, {"q": "Qual desses fatores aumenta o risco de desenvolver câncer de mama?", "o": ["Praticar esportes", "Dormir bem", "Não consumir álcool", "Fumar regularmente"], "a": 3}, {"q": "O que acontece quando a mulher amamenta exclusivamente até os 6 meses?", "o": ["Aumenta o risco de câncer", "Reduz o risco de câncer de mama", "Não tem relação com o câncer", "Aumenta o risco de infecção mamária"], "a": 1}, {"q": "O uso prolongado de hormônios deve ser feito com cuidado porque:", "o": ["Não tem qualquer efeito na mama", "Pode aumentar o risco de câncer de mama", "É recomendado para todas as mulheres", "Substitui a mamografia"], "a": 1}, {"q": "A maioria dos casos de câncer de mama está relacionada a:", "o": ["Fatores genéticos hereditários", "Estresse emocional", "Hábitos e estilo de vida", "Uso de cosméticos"], "a": 2}, {"q": "Manter o peso corporal adequado após a menopausa:", "o": ["Diminui o risco de câncer de mama", "Aumenta o risco de câncer de mama", "Não interfere no risco", "Só influencia em mulheres jovens"], "a": 0}, {"q": "A exposição solar moderada ajuda na prevenção porque:", "o": ["Produz vitamina D", "Diminui o colesterol", "Evita tumores de pele", "Substitui exercícios"], "a": 0}, {"q": "O consumo de álcool deve ser:", "o": ["Diário, em pequenas doses", "Livre, sem restrição", "Reduzido ou evitado", "Aumentado para relaxar"], "a": 2}, {"q": "O estresse crônico:", "o": ["Pode afetar o sistema imunológico", "Protege contra o câncer", "Não tem relação com a saúde", "É sempre positivo"], "a": 0}, {"q": "Dormir bem é importante porque:", "o": ["Reduz hormônios associados ao câncer", "Aumenta o estresse", "Interrompe o metabolismo", "Prejudica a imunidade"], "a": 0}];
 
 function shuffle(a){ const arr = a.slice(); for(let i=arr.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
 
@@ -78,26 +79,28 @@ function select(btn, correct){
   if(correct){ btn.classList.add('correct'); score++; statusEl.textContent = `Acertos: ${score}`; }
   else{ btn.classList.add('wrong'); statusEl.textContent = `Acertos: ${score}`; }
   idx++;
-  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,1200); return; }
-  if(idx>=perguntas.length){ setTimeout(finish,1200); return; }
-  setTimeout(()=> render(), 1000);
+  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,800); return; }
+  if(idx>=perguntas.length){ setTimeout(finish,800); return; }
+  setTimeout(()=> render(), 700);
 }
 
 function finish(){
   optionsEl.innerHTML = '';
   questionEl.textContent = '';
+  numEl.textContent = score >= 4 ? '' : total;
+  statusEl.textContent = `Você acertou ${score} de ${total}.`;
   if(score>=4){
     goalEl.style.display='block';
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Finalizar';
-    btn.onclick = ()=>{ window.close(); };
+    btn.onclick = ()=> { window.close(); };
     optionsEl.appendChild(btn);
   } else {
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Tentar novamente';
-    btn.onclick = ()=>{ location.reload(); };
+    btn.onclick = ()=> { location.reload(); };
     optionsEl.appendChild(btn);
   }
 }

@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -39,7 +40,7 @@ h1{margin:0;color:var(--pink);font-size:1.4rem}
   </div>
 
 <script>
-const raw = [];
+const raw = [{"q": "O trabalhador afastado por tratamento oncológico tem direito a:", "o": ["Auxílio-doença do INSS (quando atendidos os requisitos)", "Férias vitalícias", "Aumento salarial automático", "Encerramento do contrato sem pagamento"], "a": 0}, {"q": "Se o tratamento deixar sequelas permanentes, o paciente pode ter direito a:", "o": ["Aposentadoria por invalidez (se comprovada)", "Direito a duas licenças-maternidade adicionais", "Transferência imediata para qualquer cargo", "Suspensão de pagamento de contas sem análise"], "a": 0}, {"q": "Durante o tratamento, o trabalhador pode solicitar:", "o": ["Auxílio financeiro sem avaliação", "Saque do FGTS e PIS/PASEP conforme regras aplicáveis", "Cancelamento automático de dívidas sem processo", "Pagamento de multa por parte do empregador"], "a": 1}, {"q": "Mulheres mastectomizadas têm direito a:", "o": ["Reconstrução mamária gratuita pelo SUS, conforme a lei", "Apenas cirurgia estética particular", "Reconstrução apenas após 10 anos", "Alimentação gratuita vitalícia"], "a": 0}, {"q": "A Lei nº 12.732/2012 garante:", "o": ["Acesso a próteses gratuitamente em qualquer país", "Início do tratamento oncológico pelo SUS em prazo máximo recomendado (com regras específicas)", "Isenção automática de IPTU", "Tratamento apenas em hospitais privados"], "a": 1}, {"q": "Planos de saúde podem negar cobertura do tratamento oncológico quando:", "o": ["Nunca — o tratamento oncológico tem cobertura conforme legislação e regras do plano", "Sempre podem negar sem justificar", "Apenas quando o paciente não pagar a anuuidade", "Se a doença for genética"], "a": 0}, {"q": "Pacientes com câncer podem ter isenção de imposto de renda quando:", "o": ["Há invalidez permanente e seguindo a legislação vigente", "Estão empregados", "Recebem alta hospitalar", "Têm qualquer despesa médica"], "a": 0}, {"q": "Pacientes em tratamento pelo SUS têm direito a:", "o": ["Transporte gratuito em todos os deslocamentos sem regras", "Possibilidade de transporte ou auxílio para tratamento em algumas cidades/condições, conforme programas locais", "Transporte apenas para viagens internacionais", "Nenhum tipo de auxílio logístico"], "a": 1}, {"q": "Quem tem financiamento habitacional e fica inválido por câncer:", "o": ["Pode ter quitação do contrato conforme cláusulas da seguradora e do contrato", "Perde automaticamente o imóvel", "Deve pagar multa por invalidez", "Tem aumento automático da parcela"], "a": 0}, {"q": "Após o tratamento, o retorno ao trabalho deve ser:", "o": ["Imediato e sem qualquer avaliação", "Acompanhado por médico e, se necessário, feito de forma gradativa com adaptações", "Proibido para sempre", "Decidido exclusivamente pelo empregador"], "a": 1}];
 
 function shuffle(a){ const arr = a.slice(); for(let i=arr.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
 
@@ -78,26 +79,28 @@ function select(btn, correct){
   if(correct){ btn.classList.add('correct'); score++; statusEl.textContent = `Acertos: ${score}`; }
   else{ btn.classList.add('wrong'); statusEl.textContent = `Acertos: ${score}`; }
   idx++;
-  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,1200); return; }
-  if(idx>=perguntas.length){ setTimeout(finish,1200); return; }
-  setTimeout(()=> render(), 1000);
+  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,800); return; }
+  if(idx>=perguntas.length){ setTimeout(finish,800); return; }
+  setTimeout(()=> render(), 700);
 }
 
 function finish(){
   optionsEl.innerHTML = '';
   questionEl.textContent = '';
+  numEl.textContent = score >= 4 ? '' : total;
+  statusEl.textContent = `Você acertou ${score} de ${total}.`;
   if(score>=4){
     goalEl.style.display='block';
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Finalizar';
-    btn.onclick = ()=>{ window.close(); };
+    btn.onclick = ()=> { window.close(); };
     optionsEl.appendChild(btn);
   } else {
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Tentar novamente';
-    btn.onclick = ()=>{ location.reload(); };
+    btn.onclick = ()=> { location.reload(); };
     optionsEl.appendChild(btn);
   }
 }

@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -39,7 +40,7 @@ h1{margin:0;color:var(--pink);font-size:1.4rem}
   </div>
 
 <script>
-const raw = [];
+const raw = [{"q": "O câncer de mama em homens representa aproximadamente:", "o": ["10% dos casos", "1% dos casos", "25% dos casos", "0% dos casos"], "a": 1}, {"q": "O que é ginecomastia?", "o": ["Um tipo de câncer de mama", "Crescimento benigno das mamas masculinas", "Uma infecção cutânea", "Um problema exclusivo de crianças"], "a": 1}, {"q": "Homens com mutação no gene BRCA2:", "o": ["Têm risco aumentado de câncer de mama", "Estão imunes ao câncer de mama", "Só correm risco de doenças cardíacas", "Não têm relação com câncer"], "a": 0}, {"q": "O câncer de mama em homens:", "o": ["Não existe", "É sempre mortal", "Existe e pode ser curado se diagnosticado cedo", "Não precisa de tratamento"], "a": 2}, {"q": "A principal dificuldade no diagnóstico masculino é:", "o": ["Falta de exames de imagem para homens", "Falta de informação e atenção aos sintomas iniciais", "A disease não apresenta sintomas", "Exames são proibidos para homens"], "a": 1}, {"q": "Homens também devem procurar um médico quando:", "o": ["Percebem um nódulo ou secreção no mamilo", "Sentem apenas fome incomum", "Têm tontura sem relação com a mama", "Apresentam dor de dente"], "a": 0}, {"q": "O tratamento do câncer de mama em homens é geralmente:", "o": ["Muito parecido com o das mulheres (cirurgia, quimio, radioterapia conforme o caso)", "Idêntico ao tratamento de próstata", "Feito somente com remédios caseiros", "Sem necessidade de cirurgia"], "a": 0}, {"q": "Homens com ginecomastia devem:", "o": ["Observar a região e procurar avaliação se surgirem nódulos duros ou secreção", "Ignorar totalmente qualquer mudança", "Evitar qualquer exame de imagem", "Fazer apenas tratamento estético"], "a": 0}, {"q": "A idade média em que homens são diagnosticados costuma ser:", "o": ["20 anos", "40 anos", "60 anos", "90 anos"], "a": 2}, {"q": "A informação sobre câncer de mama masculino é importante porque:", "o": ["Aumenta o pânico sem motivo", "Garante diagnóstico precoce e salva vidas", "Só interessa a pesquisadores", "Não muda o prognóstico"], "a": 1}];
 
 function shuffle(a){ const arr = a.slice(); for(let i=arr.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
 
@@ -78,26 +79,28 @@ function select(btn, correct){
   if(correct){ btn.classList.add('correct'); score++; statusEl.textContent = `Acertos: ${score}`; }
   else{ btn.classList.add('wrong'); statusEl.textContent = `Acertos: ${score}`; }
   idx++;
-  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,1200); return; }
-  if(idx>=perguntas.length){ setTimeout(finish,1200); return; }
-  setTimeout(()=> render(), 1000);
+  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,800); return; }
+  if(idx>=perguntas.length){ setTimeout(finish,800); return; }
+  setTimeout(()=> render(), 700);
 }
 
 function finish(){
   optionsEl.innerHTML = '';
   questionEl.textContent = '';
+  numEl.textContent = score >= 4 ? '' : total;
+  statusEl.textContent = `Você acertou ${score} de ${total}.`;
   if(score>=4){
     goalEl.style.display='block';
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Finalizar';
-    btn.onclick = ()=>{ window.close(); };
+    btn.onclick = ()=> { window.close(); };
     optionsEl.appendChild(btn);
   } else {
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Tentar novamente';
-    btn.onclick = ()=>{ location.reload(); };
+    btn.onclick = ()=> { location.reload(); };
     optionsEl.appendChild(btn);
   }
 }
