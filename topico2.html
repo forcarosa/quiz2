@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -40,7 +39,7 @@ h1{margin:0;color:var(--pink);font-size:1.4rem}
   </div>
 
 <script>
-const raw = [{"q": "A partir de que idade o Ministério da Saúde recomenda iniciar a mamografia anual?", "o": ["20 anos", "30 anos", "40 anos", "50 anos"], "a": 2}, {"q": "O autoexame das mamas ajuda a:", "o": ["Substituir a mamografia", "Não serve para nada", "Conhecer o corpo e perceber alterações", "Fazer diagnóstico definitivo"], "a": 2}, {"q": "Qual exame confirma o diagnóstico de câncer de mama?", "o": ["Mamografia", "Ultrassonografia", "Exame de sangue", "Biópsia"], "a": 3}, {"q": "O câncer de mama é mais comum em mulheres:", "o": ["Com menos de 30 anos", "Entre 50 e 69 anos", "Que nunca tiveram filhos (sempre)", "Apenas na pós-menopausa"], "a": 1}, {"q": "A principal vantagem da mamografia é:", "o": ["Detectar alterações antes de serem palpáveis", "Substituir o autoexame", "Tratar o câncer", "Evitar a cirurgia"], "a": 0}, {"q": "O exame de imagem complementar à mamografia pode ser:", "o": ["Ressonância magnética das mamas", "Raio-X do pé", "Eletroencefalograma", "Colonoscopia"], "a": 0}, {"q": "O intervalo recomendado para a mamografia, em mulheres sem histórico familiar, costuma ser:", "o": ["A cada 3 meses", "A cada 6 meses", "Uma vez por ano", "Uma vez a cada 2 anos"], "a": 3}, {"q": "A detecção precoce é importante porque:", "o": ["Permite tratamento menos agressivo e maior chance de cura", "Aumenta a mortalidade", "Evita a necessidade de exames futuros", "Substitui acompanhamento médico"], "a": 0}, {"q": "Um nódulo suspeito geralmente apresenta:", "o": ["Dor intensa sempre", "Superfície irregular e endurecida", "Coloração azulada constante", "Emissão de sons ao toque"], "a": 1}, {"q": "A saída de secreção com sangue pelo mamilo deve ser:", "o": ["Ignorada", "Avaliada por um médico", "Tratada com pomadas caseiras", "Considerada normal se ocorrer raramente"], "a": 1}];
+const raw = [];
 
 function shuffle(a){ const arr = a.slice(); for(let i=arr.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
 
@@ -79,28 +78,26 @@ function select(btn, correct){
   if(correct){ btn.classList.add('correct'); score++; statusEl.textContent = `Acertos: ${score}`; }
   else{ btn.classList.add('wrong'); statusEl.textContent = `Acertos: ${score}`; }
   idx++;
-  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,800); return; }
-  if(idx>=perguntas.length){ setTimeout(finish,800); return; }
-  setTimeout(()=> render(), 700);
+  if(score>=4){ goalEl.style.display='block'; setTimeout(finish,1200); return; }
+  if(idx>=perguntas.length){ setTimeout(finish,1200); return; }
+  setTimeout(()=> render(), 1000);
 }
 
 function finish(){
   optionsEl.innerHTML = '';
   questionEl.textContent = '';
-  numEl.textContent = total;
-  statusEl.textContent = `Você acertou ${score} de ${total}.`;
   if(score>=4){
     goalEl.style.display='block';
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Finalizar';
-    btn.onclick = ()=> { window.location.href = 'index.html'; };
+    btn.onclick = ()=>{ window.close(); };
     optionsEl.appendChild(btn);
   } else {
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Tentar novamente';
-    btn.onclick = ()=> { location.reload(); };
+    btn.onclick = ()=>{ location.reload(); };
     optionsEl.appendChild(btn);
   }
 }
