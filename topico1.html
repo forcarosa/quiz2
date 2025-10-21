@@ -94,7 +94,10 @@ function finish(){
     const btn = document.createElement('button');
     btn.className='btn';
     btn.textContent = 'Finalizar';
-    btn.onclick = ()=> { window.close(); };
+    btn.onclick = ()=> {
+    window.open('', '_self');
+    window.close();
+};
     optionsEl.appendChild(btn);
   } else {
     const btn = document.createElement('button');
