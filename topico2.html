@@ -82,11 +82,11 @@ function select(btn, correct){
   if(score>=4){
     document.getElementById('progress').style.display='none';
     goalEl.style.display='block';
-    setTimeout(finish,800);
+    setTimeout(finish,1000);
     return;
   }
-  if(idx>=perguntas.length){ setTimeout(finish,800); return; }
-  setTimeout(()=> render(), 700);
+  if(idx>=perguntas.length){ setTimeout(finish,1000); return; }
+  setTimeout(()=> render(), 1000);
 }
 
 function finish(){
